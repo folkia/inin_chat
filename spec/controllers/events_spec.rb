@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe EventsController do
+RSpec.describe IninChat::EventsController do
   before do
     let session_chat do
       {
