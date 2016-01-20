@@ -10,6 +10,31 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use a debugger
-# gem 'byebug', group: [:development, :test]
+gem 'sqlite3'
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-bundler'
+
+  gem 'factory_girl_rails'
+
+  gem 'ffaker'
+  gem 'pry'
+
+  gem 'rubocop'
+end
+
+group :development do
+  gem 'better_errors'
+  gem 'awesome_print'
+  gem 'brakeman'
+end
+
+group :test do
+  gem 'vcr'
+  gem 'webmock'
+  gem 'capybara'
+  gem 'simplecov', require: false
+end
