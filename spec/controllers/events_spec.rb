@@ -38,17 +38,23 @@ describe IninChat::EventsController do
   context '#index' do
     it "responds with session's messages" do
       get :index, format: :json
-      expect(response.body).to eq session_chat.to_json
+      chat_json = { events: session_chat[:events].map(&:marshal_dump) }.to_json
+      expect(response.body).to eq chat_json
     end
   end
   
   context '#create' do
-    let(:new_message) { { content: 'foo' } }
-    let (:new_session_chat) { session_chat[:events] << new_message  }
-
     it 'responds with session messages plus new message' do
-      post :create, event: new_message, format: :json
-      expect(response.body).to eq new_session_chat.to_json
+      new_message_params = { content: 'foo' }
+      chat_json = {
+        events: session_chat[:events]
+          .dup
+          .push(OpenStruct.new(new_message_params))
+          .map(&:marshal_dump)
+      }.to_json
+
+      post :create, event: new_message_params, format: :json
+      expect(response.body).to eq chat_json
     end
   end
 end
