@@ -14,5 +14,6 @@ require 'vcr'
 
 RSpec.configure do |config|
   config.include Capybara::RSpecMatchers
+  config.render_views
   config.infer_spec_type_from_file_location!
 end
