@@ -1,4 +1,4 @@
 module IninChat
-  class ApplicationController < ::ApplicationController
+  class ApplicationController < ActionController::Base
   end
 end
