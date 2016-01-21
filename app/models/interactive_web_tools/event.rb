@@ -1,4 +1,4 @@
-module IninChat
+module InteractiveWebTools
   class Event
     attr_reader :type,
                 :sequence_number,

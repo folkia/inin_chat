@@ -5,7 +5,7 @@ require "action_mailer/railtie"
 require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
-require "inin_chat"
+require "interactive_web_tools"
 
 module Dummy
   class Application < Rails::Application

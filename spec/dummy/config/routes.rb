@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount IninChat::Engine => "/inin_chat"
+  mount InteractiveWebTools::Engine => "/interactive_web_tools"
 end

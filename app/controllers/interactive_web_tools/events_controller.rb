@@ -1,11 +1,11 @@
-module IninChat
+module InteractiveWebTools
   class EventsController < ApplicationController
     def index
-      @events = session[:inin_chat]
+      @events = session[:interactive_web_tools]
     end
 
     def create
-      @events = session[:inin_chat]
+      @events = session[:interactive_web_tools]
       @events[:events] << Event.new(event_params)
       render 'index'
     end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe IninChat::EventsController do
-  routes { IninChat::Engine.routes }
+describe InteractiveWebTools::EventsController do
+  routes { InteractiveWebTools::Engine.routes }
 
   let :session_chat do
     {
@@ -32,7 +32,7 @@ describe IninChat::EventsController do
   end
     
   before do
-    session[:inin_chat] = session_chat
+    session[:interactive_web_tools] = session_chat
   end
 
   context '#index' do

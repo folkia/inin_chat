@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    inin_chat (0.0.1)
+    interactive_web_tools (0.0.1)
       jbuilder (~> 2.4.0)
       rails (~> 4.2.5)
 
@@ -255,7 +255,7 @@ DEPENDENCIES
   guard
   guard-bundler
   guard-rspec
-  inin_chat!
+  interactive_web_tools!
   pry
   rspec-rails
   rubocop
