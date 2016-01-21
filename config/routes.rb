@@ -1,3 +1,3 @@
-IninChat::Engine.routes.draw do
+InteractiveWebTools::Engine.routes.draw do
   resources :events, only: [:index, :create], defaults: { format: :json }
 end
