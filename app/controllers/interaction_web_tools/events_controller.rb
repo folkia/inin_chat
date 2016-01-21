@@ -1,11 +1,11 @@
-module InteractiveWebTools
+module InteractionWebTools
   class EventsController < ApplicationController
     def index
-      @events = session[:interactive_web_tools]
+      @events = session[:interaction_web_tools]
     end
 
     def create
-      @events = session[:interactive_web_tools]
+      @events = session[:interaction_web_tools]
       @events[:events] << Event.new(event_params)
       render 'index'
     end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    interactive_web_tools (0.0.1)
+    interaction_web_tools_rails (0.0.1)
       jbuilder (~> 2.4.0)
       rails (~> 4.2.5)
 
@@ -255,7 +255,7 @@ DEPENDENCIES
   guard
   guard-bundler
   guard-rspec
-  interactive_web_tools!
+  interaction_web_tools_rails!
   pry
   rspec-rails
   rubocop
