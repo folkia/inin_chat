@@ -1,4 +1,4 @@
-module InteractiveWebTools
+module InteractionWebTools
   class ApplicationController < ActionController::Base
   end
 end

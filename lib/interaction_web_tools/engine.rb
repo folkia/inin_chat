@@ -1,10 +1,10 @@
-Gem.loaded_specs['interactive_web_tools'].dependencies.each do |d|
+Gem.loaded_specs['interaction_web_tools_rails'].dependencies.each do |d|
   require d.name
 end
 
-module InteractiveWebTools
+module InteractionWebTools
   class Engine < ::Rails::Engine
-    isolate_namespace InteractiveWebTools
+    isolate_namespace InteractionWebTools
 
     config.generators do |g|
       g.test_framework :rspec

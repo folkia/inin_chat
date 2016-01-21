@@ -1,4 +1,4 @@
-module InteractiveWebTools
+module InteractionWebTools
   class Event
     attr_reader :type,
                 :sequence_number,

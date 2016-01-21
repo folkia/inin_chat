@@ -1,4 +1,4 @@
-module InteractiveWebTools
+module InteractionWebTools
   module ApplicationHelper
   end
 end
