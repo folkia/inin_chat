@@ -1,3 +1,3 @@
-# interactionWebTools
+# InteractionWebTools
 
 This project rocks and uses MIT-LICENSE.
