@@ -1,7 +1,3 @@
-# TODO: set content-type for requests
-# TODO: refactor 'that' hack
-# TODO: create helper for rendering chat partial
-
 window.Chat = class Chat
   #@EVENTS_PATH: 'interaction_web_tools/events'
   @EVENTS_PATH: 'http://private-cf542-ininmessages.apiary-mock.com/events'
