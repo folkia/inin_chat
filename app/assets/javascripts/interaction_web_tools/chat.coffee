@@ -1,6 +1,5 @@
 window.Chat = class Chat
-  #@EVENTS_PATH: 'interaction_web_tools/events'
-  @EVENTS_PATH: 'http://private-cf542-ininmessages.apiary-mock.com/events'
+  @EVENTS_PATH: 'interaction_web_tools/events'
   @MESSAGES_DIV: '.chat-messages'
 
   constructor: ->
