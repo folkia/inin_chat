@@ -1,6 +1,8 @@
 require 'rails_helper'
 
+# TODO: fix failing specs
 describe InteractionWebTools::EventsController do
+  WebMock.allow_net_connect!
   routes { InteractionWebTools::Engine.routes }
 
   let :session_chat do
