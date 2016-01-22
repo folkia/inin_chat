@@ -49,6 +49,8 @@ module InteractionWebTools
         req = Net::HTTP::Get.new(uri)
 
         res = http.request(req)
+        parsed_response = JSON.parse res.body
+        return if parsed_response['chat']['status']['type'] == 'failure'
         puts "Response HTTP Status Code: #{res.code}"
         puts "Response HTTP Response Body: #{res.body}"
         parse_events_from_poll_response(res)

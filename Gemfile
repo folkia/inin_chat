@@ -10,8 +10,6 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-gem 'sqlite3'
-
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard'
@@ -28,6 +26,7 @@ end
 
 group :development do
   gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'awesome_print'
   gem 'brakeman'
 end
