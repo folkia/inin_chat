@@ -1,16 +1,5 @@
 module InteractionWebTools
   class EventsController < ApplicationController
-
-    def load_chat
-      session['interaction_web_tools'] ||= {}
-      provider_id = session['interaction_web_tools']['provider_id']
-      unless provider_id
-        provider_id = client.start
-        session['interaction_web_tools']['provider_id'] = provider_id
-      end
-      provider_id
-    end
-
     def index
       provider_id = load_chat
       @events = client.poll(provider_id)
@@ -29,6 +18,16 @@ module InteractionWebTools
     end
 
     private
+
+    def load_chat
+      session['interaction_web_tools'] ||= {}
+      provider_id = session['interaction_web_tools']['provider_id']
+      unless provider_id
+        provider_id = client.start
+        session['interaction_web_tools']['provider_id'] = provider_id
+      end
+      provider_id
+    end
 
     def client
       InteractionWebTools::IninChatAdapter.new
