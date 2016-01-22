@@ -1,8 +1,8 @@
 window.InteractionWebTools ||= {}
 window.InteractionWebTools.chat = new Chat
 
-$ ->
-  InteractionWebTools.chat.receiveMessages()
+$(document).on 'click', '.chat-start', ->
+  InteractionWebTools.chat.init()
 
 $(document).on 'submit', 'form.chat-message-form', (e) ->
   e.preventDefault()
