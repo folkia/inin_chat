@@ -5,9 +5,9 @@ window.Chat = class Chat
   constructor: ->
 
   receiveMessages: ->
-    that = @
-    $.get @constructor.EVENTS_PATH, (data) ->
-      that.renderMessages data.events
+    $.get Chat.EVENTS_PATH, (data) ->
+      InteractionWebTools.chat.renderMessages data.events
+      setTimeout InteractionWebTools.chat.receiveMessages, 1000
 
   sendMessage: (message) ->
     that = @
