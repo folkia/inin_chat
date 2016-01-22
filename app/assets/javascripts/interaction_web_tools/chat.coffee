@@ -4,10 +4,12 @@ window.Chat = class Chat
 
   constructor: ->
 
-  receiveMessages: ->
+  init: -> @pollMessages()
+
+  pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
       InteractionWebTools.chat.renderMessages data.events
-      setTimeout InteractionWebTools.chat.receiveMessages, 1000
+      setTimeout InteractionWebTools.chat.pollMessages, 1000
 
   sendMessage: (message) ->
     that = @
