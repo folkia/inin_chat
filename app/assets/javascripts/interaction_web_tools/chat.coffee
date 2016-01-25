@@ -1,5 +1,7 @@
 window.Chat = class Chat
   @EVENTS_PATH: 'interaction_web_tools/events'
+  @CHAT_BODY: '.chat-body'
+  @CHAT_CLOSE: '.chat-stop'
   @MESSAGES_DIV: '.chat-messages'
 
   constructor: ->
@@ -11,6 +13,8 @@ window.Chat = class Chat
 
   stop: ->
     @started = false
+    $(@constructor.CHAT_BODY).hide()
+    $(@constructor.CHAT_CLOSE).hide()
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
@@ -25,11 +29,15 @@ window.Chat = class Chat
       that.renderMessages data.events
 
   renderMessages: (messages) ->
+    return false unless @started
+    $(@constructor.CHAT_BODY).show()
+    $(@constructor.CHAT_CLOSE).show()
     messages = $.grep messages, (el) -> el.type == 'text'
-    that = @
+    messagesDiv = $(@constructor.MESSAGES_DIV)
     $.each messages, (index, message) ->
-      $(that.constructor.MESSAGES_DIV).append(
-        "<div class='message-#{message.participant_type}'>
-         #{message.participant_type}: #{message.content}
+      messagesDiv.append(
+        "<div class='message-#{message.participant_type.toLowerCase()}'>
+         #{message.content}
          </div>"
       )
+    messagesDiv.scrollTop messagesDiv[0].scrollHeight if messages.length
