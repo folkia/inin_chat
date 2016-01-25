@@ -12,6 +12,7 @@ window.Chat = class Chat
 
   stop: ->
     @started = false
+    $(@constructor.CHAT_BODY).hide()
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
@@ -26,6 +27,7 @@ window.Chat = class Chat
       that.renderMessages data.events
 
   renderMessages: (messages) ->
+    return false unless @started
     $(@constructor.CHAT_BODY).show()
     messages = $.grep messages, (el) -> el.type == 'text'
     messagesDiv = $(@constructor.MESSAGES_DIV)
