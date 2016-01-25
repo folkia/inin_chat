@@ -94,7 +94,7 @@ describe InteractionWebTools::EventsController do
 
   context '#create' do
     it 'responds with session messages plus new message' do
-      new_message_params = { content: test_message }
+      new_message_params = { content: test_message_for_sending }
       post :create, event: new_message_params, format: :json
       events_from_response = JSON.parse(response.body)['events']
       expect(events_from_response.any? { |event| event['content'] == test_message }).to be true
