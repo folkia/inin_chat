@@ -1,9 +1,10 @@
 require "interaction_web_tools/engine"
 
 module InteractionWebTools
-  DefaultConfig = Struct.new(:inin_server) do
+  DefaultConfig = Struct.new(:inin_server, :chat_additional_information) do
     def initialize
       self.inin_server = :inin_server
+      self.chat_additional_information = :chat_additional_information
     end
   end
 

@@ -19,7 +19,7 @@ module InteractionWebTools
           "supportedContentTypes" => "text/plain",
           "emailAddress" => "",
           "targetType" => "Workgroup",
-          "customInfo" => "Frogtail Chat test annotation!|phone=",
+          "customInfo" => chat_initiation_payload,
           "language" => "sv",
           "transcriptRequired" => false,
           "clientToken" => "deprecated"
@@ -38,6 +38,10 @@ module InteractionWebTools
       rescue StandardError => e
         puts "HTTP Request failed (#{e.message})"
       end
+    end
+
+    def chat_initiation_payload
+      InteractionWebTools.config.chat_additional_information.call
     end
 
     def poll(id)
