@@ -3,13 +3,20 @@ window.Chat = class Chat
   @MESSAGES_DIV: '.chat-messages'
 
   constructor: ->
+    @started = false
 
-  init: -> @pollMessages()
+  init: ->
+    @started = true
+    @pollMessages()
+
+  stop: ->
+    @started = false
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
       InteractionWebTools.chat.renderMessages data.events
-      setTimeout InteractionWebTools.chat.pollMessages, 1000
+      if InteractionWebTools.chat.started
+        setTimeout InteractionWebTools.chat.pollMessages, 1000
 
   sendMessage: (message) ->
     that = @
