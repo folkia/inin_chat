@@ -1,0 +1,20 @@
+.chat {
+  position: fixed;
+  bottom: 0;
+  right: 2em;
+  background-color: lightgray;
+
+  .chat-control {
+    background-color: #99cc00;
+ }
+
+  .chat-messages {
+    overflow-y: scroll;
+    height: 300px;
+    width: 300px;
+  }
+
+  .chat-body{
+    display: none;
+  }
+}

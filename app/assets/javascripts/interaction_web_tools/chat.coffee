@@ -1,5 +1,6 @@
 window.Chat = class Chat
   @EVENTS_PATH: 'interaction_web_tools/events'
+  @CHAT_BODY: '.chat-body'
   @MESSAGES_DIV: '.chat-messages'
 
   constructor: ->
@@ -25,11 +26,13 @@ window.Chat = class Chat
       that.renderMessages data.events
 
   renderMessages: (messages) ->
+    $(@constructor.CHAT_BODY).show()
     messages = $.grep messages, (el) -> el.type == 'text'
-    that = @
+    messagesDiv = $(@constructor.MESSAGES_DIV)
     $.each messages, (index, message) ->
-      $(that.constructor.MESSAGES_DIV).append(
+      messagesDiv.append(
         "<div class='message-#{message.participant_type}'>
          #{message.participant_type}: #{message.content}
          </div>"
       )
+    messagesDiv.scrollTop messagesDiv[0].scrollHeight
