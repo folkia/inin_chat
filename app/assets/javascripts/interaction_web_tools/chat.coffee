@@ -19,6 +19,7 @@ window.Chat = class Chat
         setTimeout InteractionWebTools.chat.pollMessages, 1000
 
   sendMessage: (message) ->
+    return false unless message
     that = @
     $.post @constructor.EVENTS_PATH, { event: { content: message } }, (data) ->
       that.renderMessages data.events
