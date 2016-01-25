@@ -2,10 +2,11 @@
   position: fixed;
   bottom: 0;
   right: 2em;
-  background-color: lightgray;
+  box-shadow: 0px 15px 30px grey;
 
-  .chat-control {
+ .chat-controls {
     background-color: #99cc00;
+    padding: 0.5em;
  }
 
   .chat-messages {
@@ -14,7 +15,52 @@
     width: 300px;
   }
 
-  .chat-body{
+  .chat-body, .chat-stop {
     display: none;
+  }
+
+  .message-webuser, .message-agent {
+    position:relative;
+    padding:15px;
+    margin: 0.5em;
+    color:#333;
+    background:#eee;
+    /* css3 */
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+  }
+
+  .message-webuser {
+    margin-left: 3em;
+    text-align: right;
+  }
+
+  .message-agent {
+    margin-right: 3em;
+    text-align: left;
+  }
+
+  .message-system {
+    text-align: center;
+    font-size: 0.8em;
+    color: grey;
+    padding: 0 0.25em;
+  }
+
+  .chat-message-input {
+   width: 22em; 
+  }
+
+  .chat-message-submit {
+    float: rigth;
+  }
+
+  .chat-start, .chat-stop {
+    text-decoration: none;
+  }
+
+  .chat-stop {
+    float: right;
   }
 }
