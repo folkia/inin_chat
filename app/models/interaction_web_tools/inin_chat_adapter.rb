@@ -24,7 +24,7 @@ module InteractionWebTools
           dict
         )
 
-        JSON.parse(res.body)['chat']['participantID']
+        res.body
       end
     end
 
@@ -36,8 +36,7 @@ module InteractionWebTools
         req = Net::HTTP::Get.new(uri)
         res = http.request(req)
 
-        parsed_response = JSON.parse res.body
-        parse_poll_response(parsed_response)
+        res.body
       rescue StandardError => e
         Rails.logger.error "HTTP Request failed (#{e.message})"
       end
@@ -52,8 +51,7 @@ module InteractionWebTools
             "contentType" => "text/plain"
           }
         )
-        parsed_response = JSON.parse res.body
-        parse_poll_response(parsed_response)
+        res.body
       end
     end
 
@@ -79,20 +77,6 @@ module InteractionWebTools
       http.request(req)
     rescue StandardError => e
       Rails.logger.error "HTTP Request failed (#{e.message})"
-    end
-
-    def parse_poll_response(response)
-      {
-        status: response['chat']['status']['type'],
-        events: parse_events_from_poll_response(response)
-      }
-    end
-
-    def parse_events_from_poll_response(response)
-      return unless response['chat']['status']['type'] == 'success'
-      response['chat']['events'].map { |event_params|
-        Event.from_api(event_params)
-      }.compact
     end
   end
 end

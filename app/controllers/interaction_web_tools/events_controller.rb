@@ -2,12 +2,12 @@ module InteractionWebTools
   class EventsController < ApplicationController
     def index
       provider_id = load_chat
-      @events = poll_events(provider_id)[:events]
+      @events = poll_events(provider_id).events
     end
 
     def create
       provider_id = load_chat
-      @events = client.send_message(provider_id, params[:event][:content])[:events]
+      @events = ChatResponse.parse(client.send_message(provider_id, params[:event][:content])).events
       render 'index'
     end
 
@@ -15,8 +15,8 @@ module InteractionWebTools
 
     def poll_events(provider_id, retry_count = 5)
       return nil if retry_count < 1
-      poll_response = client.poll(provider_id)
-      if poll_response[:status] != 'success' || poll_response[:events].nil?
+      poll_response = ChatResponse.parse(client.poll(provider_id))
+      if poll_response.failure?
         session['interaction_web_tools']['provider_id'] = nil
         poll_events(provider_id, retry_count - 1 )
       end
@@ -27,7 +27,7 @@ module InteractionWebTools
       session['interaction_web_tools'] ||= {}
       provider_id = session['interaction_web_tools']['provider_id']
       unless provider_id
-        provider_id = client.start
+        provider_id = ChatResponse.parse(client.start).chat_id
         session['interaction_web_tools']['provider_id'] = provider_id
       end
       provider_id

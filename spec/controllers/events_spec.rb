@@ -16,7 +16,7 @@ describe InteractionWebTools::EventsController do
           "participantID": chat_id,
           "dateFormat": "yyyy-MM-dd",
           "timeFormat": "HH:mm:ss",
-          "chatID": "2fbd90a0-4285-4dff-8da2-d5ffc25d5014",
+          "chatID": chat_id,
           "status": {
             "type": "success"
           }
