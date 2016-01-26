@@ -3,7 +3,7 @@ require 'rails_helper'
 describe InteractionWebTools::EventsController do
   routes { InteractionWebTools::Engine.routes }
 
-  let(:chat_id) { "8026ac6e-2bae-488b-810e-de776e83096a" }
+  let(:participant_id) { "8026ac6e-2bae-488b-810e-de776e83096a" }
   let(:test_message_for_sending) { FFaker::Lorem.phrase }
   let(:test_message_for_polling) { FFaker::Lorem.phrase }
   let(:server_host) { URI(InteractionWebTools.config.inin_server).host }
@@ -13,10 +13,10 @@ describe InteractionWebTools::EventsController do
         "chat": {
           "pollWaitSuggestion": 2000,
           "cfgVer": 1,
-          "participantID": chat_id,
+          "participantID": participant_id,
           "dateFormat": "yyyy-MM-dd",
           "timeFormat": "HH:mm:ss",
-          "chatID": chat_id,
+          "chatID": SecureRandom.uuid,
           "status": {
             "type": "success"
           }
@@ -72,10 +72,10 @@ describe InteractionWebTools::EventsController do
     WebMock.stub_request(:post, /.*#{Regexp.quote("/websvcs/chat/start")}/).
       to_return(:status => 200, :body => @start_chat_body.to_json, :headers => {})
 
-    WebMock.stub_request(:get, /.*#{Regexp.quote("/websvcs/chat/poll/#{chat_id}")}/).
+    WebMock.stub_request(:get, /.*#{Regexp.quote("/websvcs/chat/poll/#{participant_id}")}/).
       to_return(:status => 200, :body => @poll_example_body.to_json, :headers => {})
 
-    WebMock.stub_request(:post, /.*#{Regexp.quote("/websvcs/chat/sendMessage/#{chat_id}")}/).
+    WebMock.stub_request(:post, /.*#{Regexp.quote("/websvcs/chat/sendMessage/#{participant_id}")}/).
       to_return(:status => 200, :body => @send_example_body.to_json, :headers => {})
   end
 
