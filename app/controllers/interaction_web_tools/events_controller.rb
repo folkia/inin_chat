@@ -2,13 +2,7 @@ module InteractionWebTools
   class EventsController < ApplicationController
     def index
       provider_id = load_chat
-      @events = client.poll(provider_id)
-      unless @events
-        session['interaction_web_tools']['provider_id'] = nil
-        provider_id = load_chat
-        @events = client.poll(provider_id)
-      end
-      @events
+      @events = poll_reposnse.events
     end
 
     def create
@@ -18,6 +12,15 @@ module InteractionWebTools
     end
 
     private
+
+    def poll_events(provider_id, retry_count = 5)
+      return nil if retry_count < 1
+      poll_response = client.poll(provider_id)
+      if poll_response.status != 'success' || !poll_response.events
+        session['interaction_web_tools']['provider_id'] = nil
+        poll_events(provider_id, retry_count--)
+      end
+    end
 
     def load_chat
       session['interaction_web_tools'] ||= {}

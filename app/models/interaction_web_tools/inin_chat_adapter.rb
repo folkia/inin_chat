@@ -57,7 +57,7 @@ module InteractionWebTools
         return if parsed_response['chat']['status']['type'] == 'failure'
         puts "Response HTTP Status Code: #{res.code}"
         puts "Response HTTP Response Body: #{res.body}"
-        parse_events_from_poll_response(res)
+        parse_poll_response(res)
       rescue StandardError => e
         puts "HTTP Request failed (#{e.message})"
       end
@@ -85,10 +85,19 @@ module InteractionWebTools
         res = http.request(req)
         puts "Response HTTP Status Code: #{res.code}"
         puts "Response HTTP Response Body: #{res.body}"
-        parse_events_from_poll_response(res)
+        parse_poll_response(res)
       rescue StandardError => e
         puts "HTTP Request failed (#{e.message})"
       end
+    end
+
+    def parse_poll_response(res)
+      status = JSON.parse(res.body)['chat']['status']
+      return { status: 'failure' } if status == 'failure'
+      {
+        status: 'success',
+        events: parse_events_from_poll_response(res)
+      }
     end
 
     def parse_events_from_poll_response(res)
