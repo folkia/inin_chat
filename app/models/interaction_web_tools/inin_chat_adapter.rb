@@ -4,14 +4,16 @@ module InteractionWebTools
       InteractionWebTools.config.inin_server
     end
 
-    def start
+    def start(locale: 'sv',
+              chat_info: chat_initiation_payload,
+              target: InteractionWebTools.config.chat_target)
       begin
         uri = URI("#{server}/chat/start")
 
         http = Net::HTTP.new(uri.host, uri.port)
 
         dict = {
-          "target" => InteractionWebTools.config.chat_target,
+          "target" => target,
           "participant" => {
             "name" => "Customer",
             "credentials" => ""
@@ -19,8 +21,8 @@ module InteractionWebTools
           "supportedContentTypes" => "text/plain",
           "emailAddress" => "",
           "targetType" => "Workgroup",
-          "customInfo" => chat_initiation_payload,
-          "language" => "sv",
+          "customInfo" => chat_info,
+          "language" => locale,
           "transcriptRequired" => false,
           "clientToken" => "deprecated"
         }
