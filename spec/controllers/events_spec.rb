@@ -70,7 +70,7 @@ describe InteractionWebTools::EventsController do
       }
 
     WebMock.stub_request(:post, /.*#{Regexp.quote("/websvcs/chat/start")}/).
-            to_return(:status => 200, :body => @start_chat_body.to_json, :headers => {})
+      to_return(:status => 200, :body => @start_chat_body.to_json, :headers => {})
 
     WebMock.stub_request(:get, /.*#{Regexp.quote("/websvcs/chat/poll/#{chat_id}")}/).
       to_return(:status => 200, :body => @poll_example_body.to_json, :headers => {})

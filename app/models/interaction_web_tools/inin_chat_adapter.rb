@@ -74,7 +74,6 @@ module InteractionWebTools
 
       req = Net::HTTP::Post.new(uri)
       req.add_field "Content-Type", "application/json"
-      req.add_field "Content-Type", "application/json"
       req.body = body
 
       http.request(req)
@@ -83,15 +82,14 @@ module InteractionWebTools
     end
 
     def parse_poll_response(response)
-      status = response['chat']['status']
-      return { status: 'failure' } if status == 'failure'
       {
-        status: 'success',
+        status: response['chat']['status']['type'],
         events: parse_events_from_poll_response(response)
       }
     end
 
     def parse_events_from_poll_response(response)
+      return unless response['chat']['status']['type'] == 'success'
       response['chat']['events'].map { |event_params|
         Event.from_api(event_params)
       }.compact
