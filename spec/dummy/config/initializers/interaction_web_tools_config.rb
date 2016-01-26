@@ -3,4 +3,5 @@ InteractionWebTools.configure do |config|
   config.chat_additional_information = -> {
     'Default payload'
   }
+  congig.chat_target = 'Frogtail Labb'
 end

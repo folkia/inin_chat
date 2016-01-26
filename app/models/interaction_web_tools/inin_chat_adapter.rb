@@ -11,7 +11,7 @@ module InteractionWebTools
         http = Net::HTTP.new(uri.host, uri.port)
 
         dict = {
-          "target" => "Frogtail Labb",
+          "target" => InteractionWebTools.config.chat_target,
           "participant" => {
             "name" => "Customer",
             "credentials" => ""
