@@ -41,9 +41,12 @@ window.Chat = class Chat
     messages = $.grep messages, (el) -> el.type == 'text'
     messagesDiv = $(@constructor.MESSAGES_DIV)
     $.each messages, (index, message) ->
-      messagesDiv.append(
-        "<div class='message-#{message.participant_type.toLowerCase()}'>
-         #{message.content}
-         </div>"
-      )
+      InteractionWebTools.chat.displayMessage message
     messagesDiv.scrollTop messagesDiv[0].scrollHeight if messages.length
+
+  displayMessage: (message) ->
+    $(@constructor.MESSAGES_DIV).append(
+      "<div class='message-#{message.participant_type.toLowerCase()}'>
+       #{message.content}
+       </div>"
+    )
