@@ -19,16 +19,13 @@ window.Chat = class Chat
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
       InteractionWebTools.chat.renderMessages data.events
-      # stop polling and return on disconnect
       disconnected = false
-      $.each data.events, (e) ->
-        if event.type == 'participantStateChanged' and
-          event.state == 'disconnected'
+
+      $.each data.events, (index, event) ->
+        if (event.type == 'participantStateChanged' and
+            event.state == 'disconnected')
           return disconnected = true
       return if disconnected
-
-      # restart on specific error
-      $.each data.events, (e) ->
 
       if InteractionWebTools.chat.started
         setTimeout InteractionWebTools.chat.pollMessages, 1000
