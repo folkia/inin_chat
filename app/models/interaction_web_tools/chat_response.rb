@@ -11,15 +11,12 @@ module InteractionWebTools
     def self.parse(string)
       parsed_response = JSON.parse(string)
       response_hash = {
-        chat_id: parsed_response['chat']['chatID'],
+        chat_id: parsed_response['chat']['participantID'],
         status: {
           type: parsed_response['chat']['status']['type']
         }
       }
-      response_hash[:events] =
-        parsed_response['chat']['events'].map { |event_params|
-          Event.from_api(event_params)
-        }.compact if parsed_response['chat']['events']
+      response_hash[:events] = parsed_events(parsed_response)
       new(response_hash)
     end
 
@@ -29,6 +26,16 @@ module InteractionWebTools
 
     def failure?
       !success?
+    end
+
+    def self.parsed_events(parsed_response)
+      if parsed_response['chat']['events']
+        parsed_response['chat']['events'].map do |event_params|
+          Event.from_api(event_params)
+        end.compact
+      else
+        []
+      end
     end
 
     private
