@@ -7,7 +7,9 @@ module InteractionWebTools
 
     def create
       provider_id = load_chat
-      @events = ChatResponse.parse(client.send_message(provider_id, params[:event][:content])).events
+      @events = ChatResponse.parse(
+        client.send_message(provider_id, params[:event][:content])
+      ).events
       render 'index'
     end
 
