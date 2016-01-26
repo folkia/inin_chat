@@ -6,5 +6,6 @@ json.events do |json|
     json.participant_type event.participant_type if event.participant_type
     json.participant_id event.participant_id if event.participant_id
     json.content event.content if event.content
+    json.state event.state if event.state
   end if @events
 end
