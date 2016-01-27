@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Folkefinans ruby team"]
   s.email       = ["stanislav.gorski@gmail.com"]
   s.homepage    = "https://github.com/folkia/interaction_web_tools_rails"
-  s.summary     = "TODO: Summary of InteractionWebTools."
-  s.description = "TODO: Description of InteractionWebTools."
+  s.summary     = "InteractionWebTools."
+  s.description = "Description of InteractionWebTools."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
