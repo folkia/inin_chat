@@ -2,17 +2,32 @@
   position: fixed;
   bottom: 0;
   right: 2em;
-  box-shadow: 0px 15px 30px grey;
+  box-shadow: 0px 5px 15px grey;
+  z-index: 99;
+  -webkit-backdrop-filter: blur(5px);
+  /*background-color: rgba(255, 255, 255, 0.9);*/
+  background-color: $chat-window-background;
+  border-radius: 10px 10px 0 0;
+  border: 1px solid darken($chat-title-background, 5%);
+  border-bottom: none;
 
- .chat-controls {
-    background-color: #99cc00;
+  .chat-controls {
+    background-color: $chat-title-background;
     padding: 0.5em;
+    color: $chat-title-text;
+    border-radius: 10px 10px 0 0;
+    a {
+      &:hover, &:link, &:active, &:visited {
+        color: $chat-title-text;
+        text-decoration: none;        
+      } 
+    }
  }
 
   .chat-messages {
     overflow-y: scroll;
-    height: 300px;
-    width: 300px;
+    height: 22em;
+    width: 22em;
   }
 
   .chat-body, .chat-stop {
@@ -23,28 +38,23 @@
     position:relative;
     padding:15px;
     margin: 0.5em;
-    color:#333;
-    background:#eee;
-    /* css3 */
-    -webkit-border-radius:10px;
-    -moz-border-radius:10px;
-    border-radius:10px;
+    color: $chat-bubble-text;
+    background: $chat-bubble-background;
+    border-radius: 10px;
   }
 
   .message-webuser {
     margin-left: 3em;
-    text-align: right;
   }
 
   .message-agent {
     margin-right: 3em;
-    text-align: left;
   }
 
   .message-system {
     text-align: center;
     font-size: 0.8em;
-    color: grey;
+    color: $chat-window-text;
     padding: 0 0.25em;
   }
 
