@@ -30,6 +30,10 @@
     width: 22em;
   }
 
+  .chat-message-form {
+    margin: 0.25em !important;
+}
+
   .chat-body, .chat-stop {
     display: none;
   }
@@ -60,6 +64,7 @@
 
   .chat-message-input {
    width: 22em; 
+   margin-bottom: 0;
   }
 
   .chat-message-submit {
