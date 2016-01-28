@@ -1,0 +1,3 @@
+nb:
+  customer_service: Kundeservice
+  conversation_ended: "Conversation has ended. You can <a href='#' class='chat-start'>call back</a> if you want to"
