@@ -1,31 +1,41 @@
 module InteractionWebTools
   class IninChatAdapter
-    def start(locale: 'sv',
-              chat_info: chat_initiation_payload,
-              target: InteractionWebTools.config.chat_target)
-      begin
-        dict = {
-          "target" => target,
-          "participant" => {
-            "name" => "Customer",
-            "credentials" => ""
-          },
-          "supportedContentTypes" => "text/plain",
-          "emailAddress" => "",
-          "targetType" => "Workgroup",
-          "customInfo" => chat_info,
-          "language" => locale,
-          "transcriptRequired" => false,
-          "clientToken" => "deprecated"
-        }
+    def self.default_config
+      {
+        locale: 'en',
+        chat_info: chat_initiation_payload,
+        target: InteractionWebTools.config.chat_target
+      }
+    end
 
-        res = make_post(
-          URI("#{server}/chat/start"),
-          dict
-        )
+    def self.chat_initiation_payload
+      InteractionWebTools.config.chat_additional_information.call
+    end
 
-        res.body
-      end
+    def start(opts)
+      opts ||= {}
+      config = self.class.default_config.merge opts
+      dict = {
+        "target" => config[:target],
+        "participant" => {
+          "name" => "Customer",
+          "credentials" => ""
+        },
+        "supportedContentTypes" => "text/plain",
+        "emailAddress" => "",
+        "targetType" => "Workgroup",
+        "customInfo" => config[:chat_info],
+        "language" => config[:locale],
+        "transcriptRequired" => false,
+        "clientToken" => "deprecated"
+      }
+
+      res = make_post(
+        URI("#{server}/chat/start"),
+        dict
+      )
+
+      res.body
     end
 
     def poll(id)
@@ -59,10 +69,6 @@ module InteractionWebTools
 
     def server
       InteractionWebTools.config.inin_server
-    end
-
-    def chat_initiation_payload
-      InteractionWebTools.config.chat_additional_information.call
     end
 
     def make_post(uri, dict)

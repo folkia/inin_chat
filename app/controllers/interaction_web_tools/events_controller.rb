@@ -30,7 +30,7 @@ module InteractionWebTools
       session['interaction_web_tools'] ||= {}
       provider_id = session['interaction_web_tools']['provider_id']
       unless provider_id
-        provider_id = ChatResponse.parse(client.start).chat_id
+        provider_id = ChatResponse.parse(client.start(chat_config)).chat_id
         session['interaction_web_tools']['provider_id'] = provider_id
       end
       provider_id
@@ -38,6 +38,10 @@ module InteractionWebTools
 
     def client
       InteractionWebTools::IninChatAdapter.new
+    end
+
+    def chat_config
+      session['interaction_web_tools']['chat_config']
     end
 
     def event_params
