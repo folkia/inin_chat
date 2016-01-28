@@ -30,7 +30,6 @@ window.Chat = class Chat
 
   sendMessage: (message) ->
     return false unless message
-    return @notifyConversationEnd() unless @started
     that = @
     $.post @constructor.EVENTS_PATH, { event: { content: message } }, (data) ->
       that.renderMessages data.events
@@ -44,13 +43,6 @@ window.Chat = class Chat
     $.each messages, (index, message) ->
       InteractionWebTools.chat.displayMessage message
     messagesDiv.scrollTop messagesDiv[0].scrollHeight if messages.length
-
-  notifyConversationEnd: ->
-    # TODO: extract message content to I18n
-    # TODO: add I18n.js
-    @displayMessage
-      participant_type: 'system'
-      content: 'Agent has left the conversation. Please call back'
 
   displayMessage: (message) ->
     $(@constructor.MESSAGES_DIV).append(

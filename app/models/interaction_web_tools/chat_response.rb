@@ -28,6 +28,21 @@ module InteractionWebTools
       !success?
     end
 
+    def events
+      if @events.any? do |event|
+        event.state == 'disconnected' &&
+          event.type == 'participantStateChanged'
+      end
+        event = Event.new(
+          type: 'text',
+          participant_type: 'System',
+          content: I18n.t('conversation_ended')
+        )
+        @events << event 
+      end
+      @events
+    end
+
     def self.parsed_events(parsed_response)
       if parsed_response['chat']['events']
         parsed_response['chat']['events'].map do |event_params|
