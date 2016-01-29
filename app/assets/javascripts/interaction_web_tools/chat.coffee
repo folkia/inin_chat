@@ -41,6 +41,7 @@ window.Chat = class Chat
     messages = $.grep messages, (el) -> el.type == 'text'
     messagesDiv = $(@constructor.MESSAGES_DIV)
     $.each messages, (index, message) ->
+      message.content = message.content.replace(/(?:\r\n|\r|\n)/g, '<br />');
       InteractionWebTools.chat.displayMessage message
     messagesDiv.scrollTop messagesDiv[0].scrollHeight if messages.length
 
