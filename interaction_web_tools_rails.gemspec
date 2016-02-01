@@ -23,5 +23,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'jbuilder', '~> 2.4.0'
   s.add_dependency 'coffee-rails', '~> 4.1.1'
   s.add_dependency 'jquery-rails', '~> 4.1.0'
-  s.add_development_dependency 'rspec-rails', '~> 3.0'
 end
