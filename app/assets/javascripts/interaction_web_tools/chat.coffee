@@ -1,5 +1,5 @@
 window.Chat = class Chat
-  @EVENTS_PATH: 'interaction_web_tools/events'
+  @EVENTS_PATH: '/interaction_web_tools/events'
   @CHAT_BODY: '.chat-body'
   @CHAT_CLOSE: '.chat-stop'
   @MESSAGES_DIV: '.chat-messages'
