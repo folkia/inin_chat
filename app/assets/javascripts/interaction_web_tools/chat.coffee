@@ -8,13 +8,14 @@ window.Chat = class Chat
     @started = false
 
   init: ->
-    @started = true
-    @pollMessages()
+    @onChatDialogInit()
 
   stop: ->
     @started = false
     $(@constructor.CHAT_BODY).hide()
     $(@constructor.CHAT_CLOSE).hide()
+
+  onChatDialogInit: ->
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
@@ -29,13 +30,15 @@ window.Chat = class Chat
         setTimeout InteractionWebTools.chat.pollMessages, 1000
 
   sendMessage: (message) ->
+    unless @started
+      @pollMessages()
+      @started = true
     return false unless message
     that = @
     $.post @constructor.EVENTS_PATH, { event: { content: message } }, (data) ->
       that.renderMessages data.events
 
   renderMessages: (messages) ->
-    return false unless @started
     $(@constructor.CHAT_BODY).show()
     $(@constructor.CHAT_CLOSE).show()
     messages = $.grep messages, (el) -> el.type == 'text'
