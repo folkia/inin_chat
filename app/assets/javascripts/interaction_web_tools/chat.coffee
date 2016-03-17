@@ -15,7 +15,20 @@ window.Chat = class Chat
     $(@constructor.CHAT_BODY).hide()
     $(@constructor.CHAT_CLOSE).hide()
 
+  # TODO: Extract to separate messaage class
+  systemMessage: (content) ->
+    {
+      type: 'text',
+      participant_type : 'System',
+      content: content
+    }
+
   onChatDialogInit: ->
+    # TODO: Figure our how to get content for initial UI
+    messages = [
+      @systemMessage('Welcome to our chat')
+    ]
+    @renderMessages(messages)
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
