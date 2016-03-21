@@ -65,6 +65,15 @@ module InteractionWebTools
       end
     end
 
+    def exit_chat(id)
+      begin
+        res = make_post(
+            URI("#{server}/chat/exit/#{id}"), {}
+        )
+        res.body
+      end
+    end
+
     private
 
     def server

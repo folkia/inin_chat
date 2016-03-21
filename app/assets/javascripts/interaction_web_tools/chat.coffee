@@ -11,9 +11,7 @@ window.Chat = class Chat
     @onChatDialogInit()
 
   stop: ->
-    @started = false
-    $(@constructor.CHAT_BODY).hide()
-    $(@constructor.CHAT_CLOSE).hide()
+    @terminateChat()
 
   # TODO: Extract to separate messaage class
   systemMessage: (content) ->
@@ -67,3 +65,18 @@ window.Chat = class Chat
        #{message.content}
        </div>"
     )
+
+  terminateChat: ->
+    return false unless InteractionWebTools.chat.started
+    $.ajax
+      url:  @constructor.EVENTS_PATH
+      type: 'DELETE'
+      success: (result) ->
+        return
+    InteractionWebTools.chat.started = false
+    $(@constructor.CHAT_BODY).hide()
+    $(@constructor.CHAT_CLOSE).hide()
+
+window.onbeforeunload = ->
+  Chat.prototype.terminateChat()
+  return null

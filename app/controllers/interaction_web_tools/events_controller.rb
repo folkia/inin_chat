@@ -13,6 +13,11 @@ module InteractionWebTools
       render 'index'
     end
 
+    def destroy
+      client.exit_chat(load_chat)
+      render 'index'
+    end
+
     private
 
     def poll_events(provider_id, retry_count = 5)
