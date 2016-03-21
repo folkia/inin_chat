@@ -33,11 +33,12 @@ module InteractionWebTools
 
     def load_chat
       session['interaction_web_tools'] ||= {}
-      provider_id = session['interaction_web_tools']['provider_id']
-      unless provider_id
-        provider_id = ChatResponse.parse(client.start(chat_config)).chat_id
-        session['interaction_web_tools']['provider_id'] = provider_id
-      end
+      session['interaction_web_tools']['provider_id'] || init_new_chat
+    end
+
+    def init_new_chat
+      provider_id = ChatResponse.parse(client.start(chat_config)).chat_id
+      session['interaction_web_tools']['provider_id'] = provider_id
       provider_id
     end
 

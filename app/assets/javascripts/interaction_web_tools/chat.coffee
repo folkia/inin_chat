@@ -27,6 +27,8 @@ window.Chat = class Chat
       @systemMessage('Welcome to our chat')
     ]
     @renderMessages(messages)
+    $(@constructor.CHAT_BODY).show()
+    $(@constructor.CHAT_CLOSE).show()
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
@@ -51,8 +53,6 @@ window.Chat = class Chat
       that.renderMessages data.events
 
   renderMessages: (messages) ->
-    $(@constructor.CHAT_BODY).show()
-    $(@constructor.CHAT_CLOSE).show()
     messages = $.grep messages, (el) -> el.type == 'text'
     messagesDiv = $(@constructor.MESSAGES_DIV)
     $.each messages, (index, message) ->
@@ -68,15 +68,14 @@ window.Chat = class Chat
     )
 
   terminateChat: ->
-    return false unless InteractionWebTools.chat.started
+    InteractionWebTools.chat.started = false
+    $(@constructor.CHAT_BODY).hide()
+    $(@constructor.CHAT_CLOSE).hide()
     $.ajax
       url:  @constructor.EVENTS_PATH
       type: 'DELETE'
       success: (result) ->
         return
-    InteractionWebTools.chat.started = false
-    $(@constructor.CHAT_BODY).hide()
-    $(@constructor.CHAT_CLOSE).hide()
 
 window.onbeforeunload = ->
   Chat.prototype.terminateChat()
