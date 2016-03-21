@@ -14,9 +14,6 @@ $(document).on 'submit', 'form.chat-message-form', (e) ->
   input.val ''
   false
 
-#$(document).on 'ready page:load', ->
-  #autosize $('textarea.chat-message-input')
-
 $(document).on 'keyup', 'textarea.chat-message-input', (e) ->
   if (e.keyCode == 10 || e.keyCode == 13)
     if (e.shiftKey)
@@ -24,3 +21,4 @@ $(document).on 'keyup', 'textarea.chat-message-input', (e) ->
       e.preventDefault()
     else
       $(@).parents('form').first().trigger('submit')
+
