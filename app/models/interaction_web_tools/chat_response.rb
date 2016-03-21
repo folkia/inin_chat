@@ -31,7 +31,8 @@ module InteractionWebTools
     def events
       if @events.any? do |event|
         event.state == 'disconnected' &&
-          event.type == 'participantStateChanged'
+          event.type == 'participantStateChanged' &&
+          event.participant_type == 'WebUser'
       end
         event = Event.new(
           type: 'text',

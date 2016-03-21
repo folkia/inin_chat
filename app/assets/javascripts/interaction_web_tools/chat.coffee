@@ -34,7 +34,8 @@ window.Chat = class Chat
 
       $.each data.events, (index, event) ->
         if (event.type == 'participantStateChanged' and
-            event.state == 'disconnected')
+            event.state == 'disconnected' and
+            event.participantType == 'WebUser')
           return InteractionWebTools.chat.started = false
 
       if InteractionWebTools.chat.started
