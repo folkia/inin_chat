@@ -22,11 +22,6 @@ window.Chat = class Chat
     }
 
   onChatDialogInit: ->
-    # TODO: Figure our how to get content for initial UI
-    messages = [
-      @systemMessage('Welcome to our chat')
-    ]
-    @renderMessages(messages)
     $(@constructor.CHAT_BODY).show()
     $(@constructor.CHAT_CLOSE).show()
 
