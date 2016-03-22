@@ -38,14 +38,15 @@ class InteractionWebTools.Chat.Client
       @dequeueMessages()
       @renderMessages data.events
 
-      $.each data.events, (index, event) ->
-        return @started = false if (event.type == 'participantStateChanged' &&
-                                    event.state == 'disconnected' &&
-                                    event.participant_type == 'WebUser')
+      $.each data.events, (index, event) =>
+        if (event.type == 'participantStateChanged' &&
+            event.state == 'disconnected' &&
+            event.participant_type == 'WebUser')
+          @started = false
 
       setTimeout () =>
         @pollMessages()
-      , 1000 unless @killed || !@started
+      , 1000 if !@killed && @started
 
   sendMessage: (message) ->
     return unless message
