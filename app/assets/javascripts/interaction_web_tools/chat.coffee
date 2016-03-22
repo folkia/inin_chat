@@ -13,6 +13,10 @@ window.Chat = class Chat
   stop: ->
     @terminateChat()
 
+  start: ->
+    @started = true
+    @pollMessages()
+
   # TODO: Extract to separate messaage class
   systemMessage: (content) ->
     {

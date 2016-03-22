@@ -1,8 +1,11 @@
 window.InteractionWebTools ||= {}
 window.InteractionWebTools.chat = new Chat
 
-$(document).on 'click', '.chat-start', ->
+$(document).on 'click', '.chat-init', ->
   InteractionWebTools.chat.init()
+
+$(document).on 'click', '.chat-start', ->
+  InteractionWebTools.chat.start()
 
 $(document).on 'click', '.chat-stop', ->
   InteractionWebTools.chat.stop()
