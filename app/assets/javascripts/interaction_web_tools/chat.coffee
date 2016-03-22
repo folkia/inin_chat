@@ -68,8 +68,8 @@ window.Chat = class Chat
 
   terminateChat: ->
     InteractionWebTools.chat.started = false
-    $(@constructor.CHAT_BODY).hide()
-    $(@constructor.CHAT_CLOSE).hide()
+#    $(@constructor.CHAT_BODY).hide()
+#    $(@constructor.CHAT_CLOSE).hide()
     $.ajax
       url:  @constructor.EVENTS_PATH
       type: 'DELETE'
