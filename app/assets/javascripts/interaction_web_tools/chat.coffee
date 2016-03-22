@@ -26,8 +26,8 @@ window.Chat = class Chat
     }
 
   onChatDialogInit: ->
-    $(@constructor.CHAT_BODY).show()
-    $(@constructor.CHAT_CLOSE).show()
+#    $(@constructor.CHAT_BODY).show()
+#    $(@constructor.CHAT_CLOSE).show()
 
   pollMessages: ->
     $.get Chat.EVENTS_PATH, (data) ->
