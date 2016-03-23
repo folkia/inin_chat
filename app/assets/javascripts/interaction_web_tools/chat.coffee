@@ -14,33 +14,28 @@ class InteractionWebTools.Chat.Client
     @queuedMessages = []
     @endpoint = '/interaction_web_tools/events'
     @chatUI = $('#chat-ui')
-    console.log "Chat Client Instantiated"
 
   open: =>
     @chatUI.toggleClass('active')
-    console.log "Chat Client Opened"
 
   close: ->
     @terminateChat()
     @chatUI.toggleClass('active')
-    console.log "Chat Client Opened"
 
   send: (message) ->
     return if message == ""
-    console.log "Chat Client wants to send message", message
     @startChat() unless @state == stateEnum.ACTIVE
     @sendMessage(message)
     @displayIndicator("webuser")
 
-  startChat: ->
+  startChat: (showIndicator) ->
     return if @state == stateEnum.START_PENDING
     @state = stateEnum.START_PENDING
+    @displayIndicator("system") if showIndicator
     @pollMessages()
-    console.log "Chat Client Chat Start Peding"
 
   pollMessages: ->
     return if @state == stateEnum.TERMINATED
-    console.log "Chat Client is polling for messages"
     $.get @endpoint, (data) =>
       @state = stateEnum.ACTIVE
       @dismissWelcome()
@@ -63,23 +58,21 @@ class InteractionWebTools.Chat.Client
 
     $.post @endpoint, { event: { content: message } }, (data) =>
       @renderMessages data.events
-      console.log "Chat Client sent message", message
 
   queueMessage: (message) ->
     @queuedMessages.push(message)
-    console.log "Chat Client queued a message for sending", message
 
   dismissWelcome: ->
     $('.chat > .chat-body > .welcome').fadeOut();
 
   dequeueMessages: ->
     $.each @queuedMessages, (i,message) =>
-      console.log "Chat Client dequeued a message for sending", message
       @sendMessage(message)
     @queuedMessages = []
 
   renderMessages: (messages) ->
-    typing = $.grep messages, (el) -> el.type == 'typingIndicator'
+    console.log "messages recieved for render", messages
+    typing = $.grep messages, (el) -> el.type == 'typingIndicator' && el.content == true
     @displayIndicator("agent") if typing.length
 
     messages = $.grep messages, (el) -> el.type == 'text'
@@ -104,16 +97,14 @@ class InteractionWebTools.Chat.Client
     $.ajax
       url: @endpoint
       type: 'DELETE'
-    console.log "Chat Terminated"
-
     @state = stateEnum.TERMINATED
-    console.log "Chat Client Chat Terminated"
 
   displayIndicator: (type) =>
     indicator = @chatUI.find(".indicator").first().clone()
     wrap = $("<div class='pending message-#{type}'></div>").append(indicator.show())
     @hideIndicator(type)
     @chatUI.find('.chat-messages').append(wrap)
+    @autoScroll()
 
   hideIndicator: (type) =>
     @chatUI.find(".message-#{type}.pending").remove()

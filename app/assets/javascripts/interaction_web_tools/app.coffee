@@ -14,7 +14,7 @@ jQuery ->
     false
 
   $(document).on 'click', '.chat-messages a.start', =>
-    @chatClient.startChat()
+    @chatClient.startChat(true)
     false
 
   $(document).on 'submit', 'form.chat-message-form', (e) =>
