@@ -13,6 +13,10 @@ jQuery ->
     @chatClient.close()
     false
 
+  $(document).on 'click', '.chat-messages a.start', =>
+    @chatClient.startChat()
+    false
+
   $(document).on 'submit', 'form.chat-message-form', (e) =>
     input = $(e.target).find('textarea[name=content]')
     @chatClient.send input.val()
