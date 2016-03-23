@@ -2,8 +2,15 @@ window.InteractionWebTools ||= {}
 window.InteractionWebTools.Chat ||= {}
 
 class InteractionWebTools.Chat.Client
+  stateEnum = {
+    INITIAL: 0
+    START_PENDING: 1,
+    STARTED: 2,
+    KILLED: 3
+  }
+
   constructor: ->
-    @started = false
+    @state = stateEnum.INITIAL
     @queuedMessages = []
     @endpoint = '/interaction_web_tools/events'
     @chatUI = $('#chat-ui')
@@ -20,20 +27,20 @@ class InteractionWebTools.Chat.Client
 
   send: (message) ->
     console.log "Chat Client wants to send message", message
-    @startChat() unless @started
+    @startChat() unless @state == stateEnum.STARTED
     @sendMessage(message)
 
   startChat: ->
-    return if @startPending
+    return if @state == stateEnum.START_PENDING
+    @state = stateEnum.START_PENDING
     @pollMessages()
-    @startPending = true
-    console.log "Chat Client Chat Started"
+    console.log "Chat Client Chat Start Peding"
 
   pollMessages: ->
-    return if @killed
+    return if @state == stateEnum.KILLED
     console.log "Chat Client is polling for messages"
     $.get @endpoint, (data) =>
-      @started = true
+      @state = stateEnum.STARTED
       @dismissWelcome()
       @dequeueMessages()
       @renderMessages data.events
@@ -42,15 +49,15 @@ class InteractionWebTools.Chat.Client
         if (event.type == 'participantStateChanged' &&
             event.state == 'disconnected' &&
             event.participant_type == 'WebUser')
-          @started = false
+          @state = stateEnum.KILLED
 
       setTimeout () =>
         @pollMessages()
-      , 1000 if !@killed && @started
+      , 1000 if @state == stateEnum.STARTED || @state == stateEnum.START_PENDING
 
   sendMessage: (message) ->
     return unless message
-    return @queueMessage(message) unless @started
+    return @queueMessage(message) unless @state == stateEnum.STARTED
 
     $.post @endpoint, { event: { content: message } }, (data) =>
       @renderMessages data.events
@@ -90,8 +97,7 @@ class InteractionWebTools.Chat.Client
     $.ajax
       url: @endpoint
       type: 'DELETE'
+    console.log "Chat Terminated"
 
-    @killed = true
-    @started = false
-    @startPending = false
+    @state = stateEnum.KILLED
     console.log "Chat Client Chat Terminated"
