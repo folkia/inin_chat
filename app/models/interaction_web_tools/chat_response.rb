@@ -37,7 +37,7 @@ module InteractionWebTools
         event = Event.new(
           type: 'text',
           participant_type: 'System',
-          content: I18n.t('conversation_ended')
+          content: I18n.t('chat.chat_termination_mixin_message')
         )
         @events << event 
       end
