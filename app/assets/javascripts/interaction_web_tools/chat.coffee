@@ -26,9 +26,11 @@ class InteractionWebTools.Chat.Client
     console.log "Chat Client Opened"
 
   send: (message) ->
+    return if message == ""
     console.log "Chat Client wants to send message", message
     @startChat() unless @state == stateEnum.ACTIVE
     @sendMessage(message)
+    @displayIndicator("webuser")
 
   startChat: ->
     return if @state == stateEnum.START_PENDING
@@ -77,21 +79,26 @@ class InteractionWebTools.Chat.Client
     @queuedMessages = []
 
   renderMessages: (messages) ->
+    typing = $.grep messages, (el) -> el.type == 'typingIndicator'
+    @displayIndicator("agent") if typing.length
+
     messages = $.grep messages, (el) -> el.type == 'text'
     return unless messages.length
 
-    messagesDiv = @chatUI.find('.chat-messages')
     $.each messages, (index, message) =>
       message.content = message.content.replace(/(?:\r\n|\r|\n)/g, '<br />');
       @displayMessage message
-    messagesDiv.scrollTop messagesDiv[0].scrollHeight
+
 
   displayMessage: (message) =>
+    type = message.participant_type.toLowerCase()
+    @hideIndicator(type)
     @chatUI.find('.chat-messages').append(
-      "<div class='message-#{message.participant_type.toLowerCase()}'>
+      "<div class='message-#{type}'>
        #{message.content}
        </div>"
     )
+    @autoScroll()
 
   terminateChat: =>
     $.ajax
@@ -101,3 +108,16 @@ class InteractionWebTools.Chat.Client
 
     @state = stateEnum.TERMINATED
     console.log "Chat Client Chat Terminated"
+
+  displayIndicator: (type) =>
+    indicator = @chatUI.find(".indicator").first().clone()
+    wrap = $("<div class='pending message-#{type}'></div>").append(indicator.show())
+    @hideIndicator(type)
+    @chatUI.find('.chat-messages').append(wrap)
+
+  hideIndicator: (type) =>
+    @chatUI.find(".message-#{type}.pending").remove()
+
+  autoScroll: =>
+    scrollView = @chatUI.find('.chat-body')
+    scrollView.scrollTop(scrollView[0].scrollHeight)
