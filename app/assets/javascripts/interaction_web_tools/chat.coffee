@@ -5,8 +5,8 @@ class InteractionWebTools.Chat.Client
   stateEnum = {
     INITIAL: 0
     START_PENDING: 1,
-    STARTED: 2,
-    KILLED: 3
+    ACTIVE: 2,
+    TERMINATED: 3
   }
 
   constructor: ->
@@ -27,7 +27,7 @@ class InteractionWebTools.Chat.Client
 
   send: (message) ->
     console.log "Chat Client wants to send message", message
-    @startChat() unless @state == stateEnum.STARTED
+    @startChat() unless @state == stateEnum.ACTIVE
     @sendMessage(message)
 
   startChat: ->
@@ -37,10 +37,10 @@ class InteractionWebTools.Chat.Client
     console.log "Chat Client Chat Start Peding"
 
   pollMessages: ->
-    return if @state == stateEnum.KILLED
+    return if @state == stateEnum.TERMINATED
     console.log "Chat Client is polling for messages"
     $.get @endpoint, (data) =>
-      @state = stateEnum.STARTED
+      @state = stateEnum.ACTIVE
       @dismissWelcome()
       @dequeueMessages()
       @renderMessages data.events
@@ -49,15 +49,15 @@ class InteractionWebTools.Chat.Client
         if (event.type == 'participantStateChanged' &&
             event.state == 'disconnected' &&
             event.participant_type == 'WebUser')
-          @state = stateEnum.KILLED
+          @state = stateEnum.TERMINATED
 
       setTimeout () =>
         @pollMessages()
-      , 1000 if @state == stateEnum.STARTED || @state == stateEnum.START_PENDING
+      , 1000 if @state == stateEnum.ACTIVE || @state == stateEnum.START_PENDING
 
   sendMessage: (message) ->
     return unless message
-    return @queueMessage(message) unless @state == stateEnum.STARTED
+    return @queueMessage(message) unless @state == stateEnum.ACTIVE
 
     $.post @endpoint, { event: { content: message } }, (data) =>
       @renderMessages data.events
@@ -99,5 +99,5 @@ class InteractionWebTools.Chat.Client
       type: 'DELETE'
     console.log "Chat Terminated"
 
-    @state = stateEnum.KILLED
+    @state = stateEnum.TERMINATED
     console.log "Chat Client Chat Terminated"
