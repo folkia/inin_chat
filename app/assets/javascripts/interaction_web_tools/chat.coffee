@@ -112,6 +112,8 @@ class InteractionWebTools.Chat.Client
     @autoScroll()
 
   terminateChat: =>
+    $('.chat > .chat-body > .welcome').show()
+    $('.chat > .chat-body > .chat-messages').empty()
     if @state == stateEnum.ACTIVE
       $.ajax
         url: @endpoint
