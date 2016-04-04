@@ -29,5 +29,6 @@ jQuery ->
       $(e.target).parents('form').first().trigger('submit')
       false
 
-  $(document).on 'beforeunload', 'hmtl', (e) =>
+  $(window).on 'beforeunload', (e) =>
     @chatClient.terminateChat()
+    return
