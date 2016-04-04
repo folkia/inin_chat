@@ -76,24 +76,28 @@ class InteractionWebTools.Chat.Client
     @queuedMessages.push(message)
 
   dismissWelcome: ->
-    $('.chat > .chat-body > .welcome').fadeOut();
+    $('.chat > .chat-body > .welcome').fadeOut()
 
   dequeueMessages: ->
-    $.each @queuedMessages, (i,message) =>
     console.log "dequeue messages " + @queuedMessages if @debug
+    $.each @queuedMessages, (i,message) =>
       @sendMessage(message)
     @queuedMessages = []
 
   renderMessages: (messages) ->
-    typing = $.grep messages, (el) -> el.type == 'typingIndicator' && el.content == true
     console.log "messages recieved for render", messages if @debug
+    typing = $.grep(
+      messages,
+      (el) -> el.type == 'typingIndicator' && el.content == true
+    )
     @displayIndicator("agent") if typing.length
 
     messages = $.grep messages, (el) -> el.type == 'text'
     return unless messages.length
 
     $.each messages, (index, message) =>
-      message.content = message.content.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      message.content =
+        message.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
       @displayMessage message
 
 
@@ -116,7 +120,9 @@ class InteractionWebTools.Chat.Client
 
   displayIndicator: (type) =>
     indicator = @chatUI.find(".indicator").first().clone()
-    wrap = $("<div class='pending message-#{type}'></div>").append(indicator.show())
+    wrap =
+      $("<div class='pending message-#{type}'></div>")
+      .append(indicator.show())
     @hideIndicator(type)
     @chatUI.find('.chat-messages').append(wrap)
     @autoScroll()
