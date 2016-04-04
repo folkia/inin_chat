@@ -39,16 +39,26 @@ class InteractionWebTools.Chat.Client
   pollMessages: ->
     return if @state == stateEnum.TERMINATED
     $.get @endpoint, (data) =>
-      @state = stateEnum.ACTIVE
-      @dismissWelcome()
-      @dequeueMessages()
-      @renderMessages data.events
+      eventsReceived = data.events
 
-      $.each data.events, (index, event) =>
-        if (event.type == 'participantStateChanged' &&
-            event.state == 'disconnected' &&
-            event.participant_type == 'WebUser')
-          @state = stateEnum.TERMINATED
+      hasTextMessages = (
+        $.grep eventsReceived, (el) -> el.type == 'text'
+      ).length > 0
+      hasUserDisconnectedEvent = (
+        $.grep eventsReceived,
+          (el) -> el.type == 'participantStateChanged' &&
+            el.state == 'disconnected' &&
+            el.participant_type == 'WebUser'
+      ).length > 0
+
+      @renderMessages eventsReceived
+
+      if hasTextMessages && !hasUserDisconnectedEvent
+        @state = stateEnum.ACTIVE
+        @dismissWelcome()
+        @dequeueMessages()
+
+      @state = stateEnum.TERMINATED if hasUserDisconnectedEvent
 
       setTimeout () =>
         @pollMessages()
