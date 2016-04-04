@@ -94,9 +94,10 @@ class InteractionWebTools.Chat.Client
     @autoScroll()
 
   terminateChat: =>
-    $.ajax
-      url: @endpoint
-      type: 'DELETE'
+    if @state == stateEnum.ACTIVE
+      $.ajax
+        url: @endpoint
+        type: 'DELETE'
     @state = stateEnum.TERMINATED
 
   displayIndicator: (type) =>
