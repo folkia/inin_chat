@@ -14,6 +14,8 @@ class InteractionWebTools.Chat.Client
     @queuedMessages = []
     @endpoint = '/interaction_web_tools/events'
     @chatUI = $('#chat-ui')
+    if window.location.href.indexOf('debug=1') > -1
+      @debug = true
 
   open: =>
     @chatUI.toggleClass('active')
@@ -60,6 +62,7 @@ class InteractionWebTools.Chat.Client
       @renderMessages data.events
 
   queueMessage: (message) ->
+    console.log "add " + message + " to " + @queuedMessages if @debug
     @queuedMessages.push(message)
 
   dismissWelcome: ->
@@ -67,12 +70,13 @@ class InteractionWebTools.Chat.Client
 
   dequeueMessages: ->
     $.each @queuedMessages, (i,message) =>
+    console.log "dequeue messages " + @queuedMessages if @debug
       @sendMessage(message)
     @queuedMessages = []
 
   renderMessages: (messages) ->
-    console.log "messages recieved for render", messages
     typing = $.grep messages, (el) -> el.type == 'typingIndicator' && el.content == true
+    console.log "messages recieved for render", messages if @debug
     @displayIndicator("agent") if typing.length
 
     messages = $.grep messages, (el) -> el.type == 'text'
