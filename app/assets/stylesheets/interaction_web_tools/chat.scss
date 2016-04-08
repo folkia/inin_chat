@@ -46,6 +46,7 @@
 
   .chat-messages {
     overflow-y: scroll;
+    word-wrap: break-word;
     height: 22em;
     width: 22em;
   }
