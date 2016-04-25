@@ -31,6 +31,7 @@ class InteractionWebTools.Chat.Client
     @displayIndicator("webuser")
 
   startChat: (showIndicator) ->
+    @resetChatMessagesWindow()
     return if @state == stateEnum.START_PENDING
     @state = stateEnum.START_PENDING
     @displayIndicator("system") if showIndicator
@@ -111,9 +112,12 @@ class InteractionWebTools.Chat.Client
     )
     @autoScroll()
 
-  terminateChat: =>
+  resetChatMessagesWindow: =>
     $('.chat > .chat-body > .welcome').show()
     $('.chat > .chat-body > .chat-messages').empty()
+
+  terminateChat: =>
+    @resetChatMessagesWindow()
     if @state == stateEnum.ACTIVE
       $.ajax
         url: @endpoint
