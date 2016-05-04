@@ -1,15 +1,34 @@
 window.InteractionWebTools ||= {}
-window.InteractionWebTools.chat = new Chat
+window.InteractionWebTools.Chat ||= {}
 
-$(document).on 'click', '.chat-start', ->
-  InteractionWebTools.chat.init()
+jQuery ->
+  @chatClient = new InteractionWebTools.Chat.Client
+  InteractionWebTools.Chat.instance = @chatClient
 
-$(document).on 'click', '.chat-stop', ->
-  InteractionWebTools.chat.stop()
+  $(document).on 'click', '.chat > .controls > a.open', =>
+    @chatClient.open()
+    false
 
-$(document).on 'submit', 'form.chat-message-form', (e) ->
-  e.preventDefault()
-  input = $(@).find 'input[name=content]'
-  InteractionWebTools.chat.sendMessage input.val()
-  input.val ''
-  false
+  $(document).on 'click', '.chat > .controls > a.close', =>
+    @chatClient.close()
+    false
+
+  $(document).on 'click', '.chat-messages a.start', =>
+    @chatClient.startChat(true)
+    false
+
+  $(document).on 'submit', 'form.chat-message-form', (e) =>
+    input = $(e.target).find('textarea[name=content]')
+    @chatClient.send input.val()
+    input.val ''
+    false
+
+  $(document).on 'keydown', 'textarea.chat-message-input', (e) ->
+    if (e.keyCode == 10 || e.keyCode == 13)
+      return true if (e.shiftKey)
+      $(e.target).parents('form').first().trigger('submit')
+      false
+
+  $(window).on 'beforeunload', (e) =>
+    @chatClient.terminateChat()
+    return

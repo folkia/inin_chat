@@ -1,60 +1,141 @@
-window.Chat = class Chat
-  @EVENTS_PATH: 'interaction_web_tools/events'
-  @CHAT_BODY: '.chat-body'
-  @CHAT_CLOSE: '.chat-stop'
-  @MESSAGES_DIV: '.chat-messages'
+window.InteractionWebTools ||= {}
+window.InteractionWebTools.Chat ||= {}
+
+class InteractionWebTools.Chat.Client
+  stateEnum = {
+    INITIAL: 0
+    START_PENDING: 1,
+    ACTIVE: 2,
+    TERMINATED: 3
+  }
 
   constructor: ->
-    @started = false
+    @state = stateEnum.INITIAL
+    @queuedMessages = []
+    @endpoint = '/interaction_web_tools/events'
+    @chatUI = $('#chat-ui')
+    if window.location.href.indexOf('debug=1') > -1
+      @debug = true
 
-  init: ->
-    @started = true
+  open: =>
+    @chatUI.toggleClass('active')
+
+  close: ->
+    @terminateChat()
+    @chatUI.toggleClass('active')
+
+  send: (message) ->
+    return if message == ""
+    @startChat() unless @state == stateEnum.ACTIVE
+    @sendMessage(message)
+    @displayIndicator("webuser")
+
+  startChat: (showIndicator) ->
+    @resetChatMessagesWindow()
+    return if @state == stateEnum.START_PENDING
+    @state = stateEnum.START_PENDING
+    @displayIndicator("system") if showIndicator
     @pollMessages()
 
-  stop: ->
-    @started = false
-    $(@constructor.CHAT_BODY).hide()
-    $(@constructor.CHAT_CLOSE).hide()
-
   pollMessages: ->
-    $.get Chat.EVENTS_PATH, (data) ->
-      InteractionWebTools.chat.renderMessages data.events
+    return if @state == stateEnum.TERMINATED
+    $.get @endpoint, (data) =>
+      eventsReceived = data.events
 
-      $.each data.events, (index, event) ->
-        if (event.type == 'participantStateChanged' and
-            event.state == 'disconnected')
-          return InteractionWebTools.chat.started = false
+      hasTextMessages = (
+        $.grep eventsReceived, (el) -> el.type == 'text'
+      ).length > 0
+      hasUserDisconnectedEvent = (
+        $.grep eventsReceived,
+          (el) -> el.type == 'participantStateChanged' &&
+            el.state == 'disconnected' &&
+            el.participant_type == 'WebUser'
+      ).length > 0
 
-      if InteractionWebTools.chat.started
-        setTimeout InteractionWebTools.chat.pollMessages, 1000
+      @renderMessages eventsReceived
+
+      if hasTextMessages && !hasUserDisconnectedEvent
+        @state = stateEnum.ACTIVE
+        @dismissWelcome()
+        @dequeueMessages()
+
+      @state = stateEnum.TERMINATED if hasUserDisconnectedEvent
+
+      setTimeout () =>
+        @pollMessages()
+      , 1000 if @state == stateEnum.ACTIVE || @state == stateEnum.START_PENDING
 
   sendMessage: (message) ->
-    return false unless message
-    return @notifyConversationEnd() unless @started
-    that = @
-    $.post @constructor.EVENTS_PATH, { event: { content: message } }, (data) ->
-      that.renderMessages data.events
+    return unless message
+    return @queueMessage(message) unless @state == stateEnum.ACTIVE
+
+    $.post @endpoint, { event: { content: message } }, (data) =>
+      @renderMessages data.events
+
+  queueMessage: (message) ->
+    console.log "add " + message + " to " + @queuedMessages if @debug
+    @queuedMessages.push(message)
+
+  dismissWelcome: ->
+    $('.chat > .chat-body > .welcome').fadeOut()
+
+  dequeueMessages: ->
+    console.log "dequeue messages " + @queuedMessages if @debug
+    $.each @queuedMessages, (i,message) =>
+      @sendMessage(message)
+    @queuedMessages = []
 
   renderMessages: (messages) ->
-    return false unless @started
-    $(@constructor.CHAT_BODY).show()
-    $(@constructor.CHAT_CLOSE).show()
+    console.log "messages recieved for render", messages if @debug
+    typing = $.grep(
+      messages,
+      (el) -> el.type == 'typingIndicator' && el.content == true
+    )
+    @displayIndicator("agent") if typing.length
+
     messages = $.grep messages, (el) -> el.type == 'text'
-    messagesDiv = $(@constructor.MESSAGES_DIV)
-    $.each messages, (index, message) ->
-      InteractionWebTools.chat.displayMessage message
-    messagesDiv.scrollTop messagesDiv[0].scrollHeight if messages.length
+    return unless messages.length
 
-  notifyConversationEnd: ->
-    # TODO: extract message content to I18n
-    # TODO: add I18n.js
-    @displayMessage
-      participant_type: 'system'
-      content: 'Agent has left the conversation. Please call back'
+    $.each messages, (index, message) =>
+      message.content =
+        message.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
+      @displayMessage message
 
-  displayMessage: (message) ->
-    $(@constructor.MESSAGES_DIV).append(
-      "<div class='message-#{message.participant_type.toLowerCase()}'>
+
+  displayMessage: (message) =>
+    type = message.participant_type.toLowerCase()
+    @hideIndicator(type)
+    @chatUI.find('.chat-messages').append(
+      "<div class='message-#{type}'>
        #{message.content}
        </div>"
     )
+    @autoScroll()
+
+  resetChatMessagesWindow: =>
+    $('.chat > .chat-body > .welcome').show()
+    $('.chat > .chat-body > .chat-messages').empty()
+
+  terminateChat: =>
+    @resetChatMessagesWindow()
+    if @state == stateEnum.ACTIVE
+      $.ajax
+        url: @endpoint
+        type: 'DELETE'
+    @state = stateEnum.TERMINATED
+
+  displayIndicator: (type) =>
+    indicator = @chatUI.find(".indicator").first().clone()
+    wrap =
+      $("<div class='pending message-#{type}'></div>")
+      .append(indicator.show())
+    @hideIndicator(type)
+    @chatUI.find('.chat-messages').append(wrap)
+    @autoScroll()
+
+  hideIndicator: (type) =>
+    @chatUI.find(".message-#{type}.pending").remove()
+
+  autoScroll: =>
+    scrollView = @chatUI.find('.chat-body')
+    scrollView.scrollTop(scrollView[0].scrollHeight)

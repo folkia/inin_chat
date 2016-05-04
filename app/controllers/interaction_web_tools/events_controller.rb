@@ -13,6 +13,11 @@ module InteractionWebTools
       render 'index'
     end
 
+    def destroy
+      client.exit_chat(load_chat)
+      render 'index'
+    end
+
     private
 
     def poll_events(provider_id, retry_count = 5)
@@ -28,16 +33,21 @@ module InteractionWebTools
 
     def load_chat
       session['interaction_web_tools'] ||= {}
-      provider_id = session['interaction_web_tools']['provider_id']
-      unless provider_id
-        provider_id = ChatResponse.parse(client.start).chat_id
-        session['interaction_web_tools']['provider_id'] = provider_id
-      end
+      session['interaction_web_tools']['provider_id'] || init_new_chat
+    end
+
+    def init_new_chat
+      provider_id = ChatResponse.parse(client.start(chat_config)).chat_id
+      session['interaction_web_tools']['provider_id'] = provider_id
       provider_id
     end
 
     def client
       InteractionWebTools::IninChatAdapter.new
+    end
+
+    def chat_config
+      session['interaction_web_tools']['chat_config']
     end
 
     def event_params

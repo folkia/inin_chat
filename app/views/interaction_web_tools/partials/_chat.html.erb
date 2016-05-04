@@ -1,16 +1,26 @@
-<div class='chat'>
-  <div class='chat-controls'>
-    <%= link_to 'Customer support', '#', class: 'chat-start' %>
-    <%= link_to '&times;'.html_safe, '#', class: 'chat-stop' %>
+<div id="chat-ui" class='chat'>
+  <div class="indicator">
+    <div></div><div></div><div></div>
+  </div>
+
+  <div class='controls'>
+    <%= link_to t('chat.top_bar.heading'), '#', class: 'open' %>
+    <%= link_to '&times;'.html_safe, '#', class: 'close' %>
   </div>
 
   <div class='chat-body'>
-    <div class='chat-messages'>
+    <div class="welcome">
+      <h2><%= t('chat.welcome.header') %></h2>
+      <p>
+        <%= t('chat.welcome.intro') %>
+      </p>
     </div>
 
-    <%= form_tag nil, class: 'chat-message-form' do %>
-      <%= text_field_tag 'content', nil, class: 'chat-message-input' %>
-      <%= submit_tag :send, class: 'chat-message-submit' %>
-    <% end %>
+    <div class='chat-messages'>
+    </div>
   </div>
+
+  <%= form_tag nil, class: 'chat-message-form' do %>
+      <%= text_area_tag 'content', nil, class: 'chat-message-input', placeholder: t('chat.message_placeholder') %>
+  <% end %>
 </div>

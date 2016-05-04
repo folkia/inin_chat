@@ -1,0 +1,15 @@
+---
+en:
+    chat:
+        welcome:
+        header: Welcome to Frogtail Live Support
+    intro: Our agents are online 8am - 8pm Monday - Friday and 10am - 5pm at the
+    Weekends. To chat with a support agent. Please write your question in the
+    field below and we will connect you with the first available agent.
+        message_placeholder: Type your message here
+    top_bar:
+        heading: Chat with Customer Service
+    customer:
+        not_authenticated: Customer not authenticated
+    chat_termination_mixin_message: Conversation has ended. You can <a href='#' class='start'>call
+    back</a> if you want to
