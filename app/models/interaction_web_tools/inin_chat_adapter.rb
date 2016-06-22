@@ -3,8 +3,7 @@ module InteractionWebTools
     def self.default_config
       {
         locale: 'en',
-        chat_info: chat_initiation_payload,
-        target: InteractionWebTools.config.chat_target
+        chat_info: chat_initiation_payload
       }
     end
 
