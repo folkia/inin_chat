@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir['spec/**/*']
 
   s.add_dependency 'rails', '>= 4.2.5'
-  s.add_dependency 'i18n', '~> 0.7'
-  s.add_dependency 'jbuilder', '~> 2.4.0'
-  s.add_dependency 'coffee-rails', '~> 4.1.1'
-  s.add_dependency 'jquery-rails', '~> 4.1.0'
+  s.add_dependency 'i18n'
+  s.add_dependency 'jbuilder'
+  s.add_dependency 'coffee-rails'
+  s.add_dependency 'jquery-rails'
 end
